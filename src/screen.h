@@ -16,31 +16,16 @@
 
 
 /// Macros
-
-#define cursor_move(y, x) printf(CSI "%d;%dH", y, x)
-
-#define foreground_setrgb(r, g, b) printf(CSI "38;2;%d;%d;%dm", r, g, b)
-#define background_setrgb(r, g, b) printf(CSI "48;2;%d;%d;%dm", r, g, b)
-
 #define foreground_setcolor(c) printf(CSI "38;2;%d;%d;%dm", \
         c.r, c.g, c.b);
 #define background_setcolor(c) printf(CSI "48;2;%d;%d;%dm", \
         c.r, c.g, c.b);
 
 #define rgb2color(r, g, b) (color_t){(r), (g), (b)}
-#define colorp2pixel(fgc, bgc, p) (pixel_t){        \
-    .pattern = (p),                                 \
-    .fg = (fgc),                                    \
-    .bg = (bgc),                                    \
-}
+#define gray2color(v) (color_t){v, v, v} 
 
-#define rgb2pixel(r, g, b) (pixel_t){               \
-    .pattern = 0b1111,                              \
-    .fg = rgb2color(r, g, b),                       \
-}
-
+#define cursor_move(y, x) printf(CSI "%d;%dH", y, x)
 #define clear_screen() printf(CSI "2J")
-
 
 /// Structs and td
 
@@ -49,25 +34,19 @@ typedef struct {
 } color_t;
 
 typedef struct {
-    color_t fg, bg;
-    byte pattern;
-} pixel_t;
-
-typedef struct {
     int width, height;
     bool changed;
-    pixel_t *screen_old;
-    pixel_t *screen;
+    color_t *screen_old;
+    color_t *screen;
 } screen_t;
 
 
-bool pixel_eq(pixel_t p1, pixel_t p2);
 bool color_eq(color_t c1, color_t c2);
 
 screen_t screen_init(int width, int height);
-void screen_fill(pixel_t p, screen_t *screen);
+void screen_fill(color_t p, screen_t *screen);
 void screen_print(screen_t *screen);
-void screen_set(int x, int y, pixel_t p, screen_t *screen);
+void screen_set(int x, int y, color_t p, screen_t *screen);
 
 #endif
 

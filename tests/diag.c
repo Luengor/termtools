@@ -3,6 +3,8 @@
 #include "../src/screen.h"
 #include "../src/term.h"
 
+#define grad(v) ((int)(v) % 512 <= 255) ? ((int)v % 256) : (511 - (int)v % 512)
+
 int main(int argc, char *argv[])
 {
     init_term();
@@ -10,7 +12,7 @@ int main(int argc, char *argv[])
     // Get terminal size
     int width, height;
     get_term_size(&width, &height);
-    width /= 2;
+    height *= 2;
 
     // Framerate
     float framerate = (argc == 2) ? atof(argv[1]) : 1; 
@@ -19,7 +21,7 @@ int main(int argc, char *argv[])
     screen_t screen = screen_init(width, height);
     clear_screen();
 
-    screen_fill(rgb2pixel(0, 0, 0), &screen);
+    screen_fill(BLACK, &screen);
 
     // Main loop
     double dt = 0;
@@ -29,18 +31,11 @@ int main(int argc, char *argv[])
         // Do the drawing
         for (int y = 0; y < height; y++)
             for (int x = 0; x < width; x++)
-                screen_set(x, y, colorp2pixel(
-                        BLUE,
-                        RED,
-                        (1 << ((int)dttick) % 4)), &screen);
+                screen_set(x, y, gray2color(grad((x + y + dttick * 30))), &screen);
 
         // Flip screen
         dt = wait_for_frame(framerate);
         screen_print(&screen);
-
-        cursor_move(1, 1);
-        printf("%2.2lf %d", 1 / dt, (1 << ((int)dttick) % 4));
-        fflush(stdout);
     }
 
     return 0;
