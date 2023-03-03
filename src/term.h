@@ -7,8 +7,6 @@
 #define INPUT_BUFFER_SIZE 10
 
 static struct termios orig_term, curr_term;
-static char input_buffer[INPUT_BUFFER_SIZE];
-static unsigned int input_read;
 
 void init_term();
 void restore_term();
