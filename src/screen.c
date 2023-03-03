@@ -10,12 +10,13 @@
 static void draw_pixel(int x, int y, screen_t *screen)
 {
     int y2 = y / 2 * 2;
-    cursor_move(y / 2 + 1, x + 1);
+    color_t fg = screen->screen[y2 * screen->width + x];
+    color_t bg = screen->screen[(y2 + 1) * screen->width + x];
 
-    foreground_setcolor(screen->screen[y2 * screen->width + x]);
-    background_setcolor(screen->screen[(y2 + 1) * screen->width + x]);
-
-    printf("▀");
+    printf(MOVE FOREGROUND BACKGROUND "▀",
+            y / 2 + 1, x + 1,   // MOVE y x
+            fg.r, fg.g, fg.b,   // FOREGROUNG r g b
+            bg.r, bg.g, bg.b);  // BACKGROUND r g b
 }
 
 
@@ -46,17 +47,14 @@ void screen_print(screen_t *screen)
         return;
 
     // Print diff 
-    for (int row = 0; row < screen->height; row++)
+    for (int row = 0; row < screen->height; row+=2)
     {
         for (int column = 0; column < screen->width; column++)
         {
-            color_t c1 = screen->screen[column + row * screen->width];
-            color_t cold = screen->screen_old[column + row * screen->width];
-
-            if (!color_eq(c1, cold))
-                // This draws the same pixel twice!!
-                // Maybe optimize that :)
+            if (pixel_changed(column, row, screen) || 
+                    pixel_changed(column, row + 1, screen))
                 draw_pixel(column, row, screen);
+
         }
     }
 
