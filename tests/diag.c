@@ -36,6 +36,9 @@ int main(int argc, char *argv[])
         // Flip screen
         dt = wait_for_frame(framerate);
         screen_print(&screen);
+
+        if (kbhit() && getch() == 27)
+            break;
     }
 
     return 0;

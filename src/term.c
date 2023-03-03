@@ -1,4 +1,6 @@
 #include "term.h"
+#include "screen.h"
+
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <stdio.h>
@@ -9,16 +11,21 @@ void init_term()
 {
     // Save original options 
     tcgetattr(STDIN_FILENO, &orig_term);
+    tcgetattr(STDIN_FILENO, &curr_term);
 
     // Restore terminal on exit
     atexit(restore_term);
 
-    // Set non canonical
-    tcgetattr(STDIN_FILENO, &curr_term);
-
+    // Disable canonical mode 
     curr_term.c_lflag &= ~(ICANON);
+    // Disable echo
     curr_term.c_lflag &= ~(ECHO);
+    // Wait until at least 1 keystroke is availalble 
+    curr_term.c_cc[VMIN] = 1;
+    // No timeout
+    curr_term.c_cc[VTIME] = 0;
     
+    // Update terminal
     tcsetattr(STDIN_FILENO, TCSANOW, &curr_term);
 
     // Hide cursor
@@ -27,11 +34,19 @@ void init_term()
 
 void restore_term()
 {
-    // Restore
+    // Restore setting
     tcsetattr(STDIN_FILENO, TCSANOW, &orig_term);
 
-    // Show cursor
+    // Set default colors
+    printf(CSI "39m");
+    printf(CSI "49m");
+
+    // Show cursor and move it up
     printf("\e[?25h");
+    cursor_move(1, 1);
+
+    // Clear screen
+    clear_screen();
 }
 
 void get_term_size(int *width, int *height)
@@ -42,6 +57,28 @@ void get_term_size(int *width, int *height)
     *width = w.ws_col;
     *height = w.ws_row;
 }
+
+
+bool kbhit()
+{
+    struct timeval tv = { 0L, 0L };
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+    return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0;
+}
+
+int getch()
+{
+    int r;
+    byte c;
+
+    if ((r = read(STDIN_FILENO, &c, sizeof(c))) < 0)
+        return r;
+    else
+        return c;
+}
+
 
 double wait_for_frame(double framerate)
 {
