@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <math.h>
 
 #include "../src/screen.h"
 #include "../src/term.h"
@@ -34,9 +33,10 @@ int main(int argc, char *argv[])
 
         dt = wait_for_frame(10);
         screen_print(&screen);
-    }
 
-    clear_screen();
+        if (kbhit() && getch() == 27)
+            break;
+    }
 
     return 0;
 }
