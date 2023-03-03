@@ -9,6 +9,7 @@ void init_term();
 void restore_term();
 void get_term_size(int *width, int *height);
 
+double wait_for_frame(double framerate);
 
 #endif
 

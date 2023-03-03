@@ -2,11 +2,9 @@
 
 #include "screen.h"
 
-#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 
 
 /// Globals :(
@@ -124,40 +122,5 @@ void screen_set(int x, int y, pixel_t p, screen_t *screen)
 
     *old = p;
     screen->changed = true;
-}
-
-
-double wait_for_frame(double framerate)
-{
-    static double prev = -1;
-    double wait_time = 1.0 / framerate;
-
-    // Init
-    if (prev == -1) 
-    {
-        prev = (double)clock() / CLOCKS_PER_SEC;
-        return 0;
-    }
-
-    // Normal it
-    double dt = ((double)clock() / CLOCKS_PER_SEC) - prev;
-    if (dt <= wait_time)
-    {
-        struct timespec tim, tim2;
-
-        tim.tv_sec = (int)(wait_time- dt);
-        tim.tv_nsec = (1000000000L * (wait_time- dt));
-
-        nanosleep(&tim, &tim2);
-
-        dt += (wait_time - dt);
-        prev =  (double)clock() / CLOCKS_PER_SEC;
-        return dt;
-    }
-    else
-    {
-        prev =  (double)clock() / CLOCKS_PER_SEC;
-        return dt;
-    }
 }
 

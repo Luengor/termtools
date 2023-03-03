@@ -1,7 +1,6 @@
 #ifndef _INCLUDE_SCREEN_H_
 #define _INCLUDE_SCREEN_H_
 
-#include <stdbool.h>
 #include "common.h"
 
 /// Constants
@@ -69,8 +68,6 @@ screen_t screen_init(int width, int height);
 void screen_fill(pixel_t p, screen_t *screen);
 void screen_print(screen_t *screen);
 void screen_set(int x, int y, pixel_t p, screen_t *screen);
-
-double wait_for_frame(double framerate);
 
 #endif
 
