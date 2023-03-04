@@ -2,21 +2,15 @@
 #define _INCLUDE_SCREEN_H_
 
 #include "common.h"
+#include "image.h"
 
 /// Constants
 
-#define TABLE_LENGTH 5
 #define CSI "\e["
 #define CLEAR CSI "2J"
 #define MOVE CSI "%d;%dH"
 #define FOREGROUND CSI "38;2;%d;%d;%dm"
 #define BACKGROUND CSI "48;2;%d;%d;%dm"
-
-#define WHITE rgb2color(255, 255, 255)
-#define RED rgb2color(255, 0, 0)
-#define GREEN rgb2color(0, 255, 0)
-#define BLUE rgb2color(0, 0, 255)
-#define BLACK rgb2color(0, 0, 0)
 
 
 /// Macros
@@ -24,9 +18,6 @@
         c.r, c.g, c.b);
 #define background_setcolor(c) printf(BACKGROUND,           \
         c.r, c.g, c.b);
-
-#define rgb2color(r, g, b) (color_t){(r), (g), (b)}
-#define gray2color(v) (color_t){v, v, v} 
 
 #define pixel_changed(x, y, screen)                                 \
         !color_eq((screen)->screen[(y) * (screen)->width + (x)],    \
@@ -36,10 +27,6 @@
 #define clear_screen() printf(CLEAR)
 
 /// Structs and td
-
-typedef struct {
-    byte r, g, b;
-} color_t;
 
 typedef struct {
     int width, height;
@@ -52,9 +39,11 @@ typedef struct {
 bool color_eq(color_t c1, color_t c2);
 
 screen_t screen_init(int width, int height);
-void screen_fill(color_t p, screen_t *screen);
 void screen_print(screen_t *screen);
+
+void screen_fill(color_t p, screen_t *screen);
 void screen_set(int x, int y, color_t p, screen_t *screen);
+void screen_plot_image(int x, int y, image_t *img, screen_t *screen);
 
 #endif
 

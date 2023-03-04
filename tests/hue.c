@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "../src/screen.h"
+#include "../src/image.h"
 #include "../src/term.h"
 
 #define SCREEN_SIZE 16

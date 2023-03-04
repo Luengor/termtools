@@ -84,3 +84,22 @@ void screen_set(int x, int y, color_t c, screen_t *screen)
     screen->changed = true;
 }
 
+void screen_plot_image(int x, int y, image_t *image, screen_t *screen)
+{
+    #define sw screen->width
+    #define sh screen->height
+    #define iw image->width
+    #define ih image->height
+
+
+    for (int iy = y; (iy - y) < ih && iy < sh; iy++)
+        for (int ix = x; (ix - x) < iw && ix < sw; ix++)
+            screen->screen[iy * sw + ix] = image->image[(iy - y) * iw + (ix - x)];
+
+
+    #undef sw
+    #undef sh
+    #undef iw
+    #undef ih
+}
+

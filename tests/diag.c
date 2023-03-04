@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "../src/screen.h"
+#include "../src/image.h"
 #include "../src/term.h"
+
 
 #define grad(v) ((int)(v) % 512 <= 255) ? ((int)v % 256) : (511 - (int)v % 512)
 

@@ -8,7 +8,10 @@
 !*/
 
 
-# Ignore .o
+# Ignore build files
 *.o
 *.gch
+
+# Ignore some folders
+imgs/
 
