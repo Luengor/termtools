@@ -30,6 +30,9 @@ void init_term()
 
     // Hide cursor
     printf("\e[?25l");
+
+    // Clean screen
+    clear_screen();
 }
 
 void restore_term()
