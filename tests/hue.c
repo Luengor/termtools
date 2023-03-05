@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
         for (int y = 0; y < height; y++)
             for (int x = 0; x < width; x++)
             {
-                screen_set(x, y, rgb2color(
+                screen_plot(x, y, rgb2color(
                         (int)((double)x / width * 256),
                         (int)g % 256, 
                         (int)((double)y / height * 256)

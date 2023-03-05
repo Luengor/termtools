@@ -41,8 +41,9 @@ bool color_eq(color_t c1, color_t c2);
 screen_t screen_init(int width, int height);
 void screen_print(screen_t *screen);
 
-void screen_fill(color_t p, screen_t *screen);
-void screen_set(int x, int y, color_t p, screen_t *screen);
+void screen_fill(color_t c, screen_t *screen);
+void screen_plot(int x, int y, color_t c, screen_t *screen);
+void screen_plot_box(int x1, int y1, int x2, int y2, color_t, screen_t *);
 void screen_plot_image(int x, int y, image_t *img, screen_t *screen);
 
 #endif

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         // Do the drawing
         for (int y = 0; y < height; y++)
             for (int x = 0; x < width; x++)
-                screen_set(x, y, gray2color(grad((x + y + dttick * 30))), &screen);
+                screen_plot(x, y, gray2color(grad((x + y + dttick * 30))), &screen);
 
         // Flip screen
         dt = wait_for_frame(framerate);

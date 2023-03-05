@@ -73,7 +73,7 @@ void screen_fill(color_t c, screen_t *screen)
     screen->changed = true;
 }
 
-void screen_set(int x, int y, color_t c, screen_t *screen)
+void screen_plot(int x, int y, color_t c, screen_t *screen)
 {
     color_t *old = screen->screen + x + y * screen->width;
 
@@ -82,6 +82,14 @@ void screen_set(int x, int y, color_t c, screen_t *screen)
 
     *old = c;
     screen->changed = true;
+}
+
+void screen_plot_box(int x1, int y1, int x2, int y2,
+        color_t color, screen_t *screen)
+{
+    for (; y1 <= y2; y1++)
+        for (int x = x1; x <= x2; x++)
+            screen->screen[y1 * screen->width + x] = color;
 }
 
 void screen_plot_image(int x, int y, image_t *image, screen_t *screen)
