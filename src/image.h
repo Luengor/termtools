@@ -11,7 +11,7 @@
 #define BLACK rgb2color(0, 0, 0)
 
 #define rgb2color(r, g, b) (color_t){(r), (g), (b)}
-#define gray2color(v) (color_t){v, v, v} 
+#define gray2color(v) (color_t){(v), (v), (v)} 
 
 typedef struct {
     byte r, g, b;
@@ -23,7 +23,8 @@ typedef struct {
 } image_t;
 
 
-int image_read(const char *img_path, image_t *image);
+int image_read(const char *img_path, image_t *);
+void image_rotate(int steps, image_t *);
 
 
 #endif
