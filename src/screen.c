@@ -37,13 +37,13 @@ screen_t screen_init(int width, int height)
     return screen;
 }
 
-void screen_print(screen_t *screen)
+void screen_print(screen_t *screen, bool redraw)
 {
     // Move cursor up
     cursor_move(1, 1);
 
     // Check if changed
-    if (!screen->changed)
+    if (!screen->changed && !redraw)
         return;
 
     // Print diff 
@@ -51,7 +51,7 @@ void screen_print(screen_t *screen)
     {
         for (int column = 0; column < screen->width; column++)
         {
-            if (pixel_changed(column, row, screen) || 
+            if (redraw || pixel_changed(column, row, screen) || 
                     pixel_changed(column, row + 1, screen))
                 draw_pixel(column, row, screen);
 
@@ -67,6 +67,9 @@ void screen_print(screen_t *screen)
 
 void screen_fill(color_t c, screen_t *screen)
 {
+    if (c.null)
+        return;
+
     for (int i = 0; i < screen->width * screen->height; i++)
         screen->screen[i] = c;
 
@@ -75,6 +78,9 @@ void screen_fill(color_t c, screen_t *screen)
 
 void screen_plot(int x, int y, color_t c, screen_t *screen)
 {
+    if (c.null)
+        return;
+
     color_t *old = screen->screen + x + y * screen->width;
 
     if (color_eq(c, *old))
@@ -87,6 +93,9 @@ void screen_plot(int x, int y, color_t c, screen_t *screen)
 void screen_plot_box(int x1, int y1, int x2, int y2,
         color_t color, screen_t *screen)
 {
+    if (color.null)
+        return;
+
     for (; y1 <= y2; y1++)
         for (int x = x1; x <= x2; x++)
             screen->screen[y1 * screen->width + x] = color;
@@ -102,7 +111,12 @@ void screen_plot_image(int x, int y, image_t *image, screen_t *screen)
 
     for (int iy = y; (iy - y) < ih && iy < sh; iy++)
         for (int ix = x; (ix - x) < iw && ix < sw; ix++)
+        {
+            if (image->image[(iy - y) * iw + (ix - x)].null) 
+                continue;
+
             screen->screen[iy * sw + ix] = image->image[(iy - y) * iw + (ix - x)];
+        }
 
 
     #undef sw
