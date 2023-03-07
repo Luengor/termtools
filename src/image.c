@@ -57,7 +57,7 @@ int image_read(const char *img_path, image_t *image)
     return 0;
 }
 
-void image_rotate(int steps, image_t *img)
+void image_rotate(int steps, image_t *img)/*'==>*/
 {
     #define w img->width
     #define h img->height
@@ -110,5 +110,22 @@ void image_rotate(int steps, image_t *img)
     #undef i
     #undef invx 
     #undef invy 
+}/*<=='*/
+
+image_t image_from_mask(const char *mask, int width, color_t color)
+{
+    printf("%s\n", mask);
+
+    int height = strlen(mask) / width;
+
+    image_t *img = malloc(sizeof(image_t)); 
+    img->width = width;
+    img->height = height;
+    img->image = malloc(sizeof(color) * width * height);
+
+    for (int i = 0; i < width * height; i++)
+        img->image[i] = (mask[i] != ' ') ? color : NULL_COLOR;
+
+    return *img;
 }
 
