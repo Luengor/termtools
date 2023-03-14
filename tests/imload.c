@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     screen_fill(WHITE, &screen);
     screen_plot_image(0, 0, &img, &screen);
-    screen_print(&screen);
+    screen_print(&screen, true);
 
     while (true)
     {

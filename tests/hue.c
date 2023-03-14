@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
             }
 
         dt = wait_for_frame(10);
-        screen_print(&screen);
+        screen_print(&screen, true);
 
         if (kbhit() && getch() == 27)
             break;
