@@ -1,3 +1,5 @@
+.SECONDEXPANSION:
+
 # Vars
 testd := tests
 srcd := src
@@ -22,7 +24,7 @@ tests: $(test_bins)
 
 # This re-makes ALL tests every time 1 changes
 # Bad, but the best I can do for now
-$(test_bins): $(test_sources) $(lib_objects)
+$(test_bins): $(testd)/$$@.c $(lib_objects)
 	$(CC) -o $@ $(CPPFLAGS) $(testd)/$@.c $(lib_objects) 
 
 # Clean
